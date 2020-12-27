@@ -1,39 +1,20 @@
 import React, { Component } from 'react';
 import Square from '../Square/Square';
 
-class Board extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      squares: new Array(9).fill(null),
-      xIsNext: true,
-    }
-  }
 
-  handleClick(i) {
-    // 불변성을 위해 spread 
-    const squares = [...this.state.squares];
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
-    this.setState({
-      squares: squares,
-      xIsNext: !this.state.xIsNext,
-    });
-  }
-  
+class Board extends Component {
   renderSquare(i) {
     return (
       <Square 
-        value={this.state.squares[i]} 
-        onClick={() => this.handleClick(i)}
+        value={this.props.squares[i]} 
+        onClick={() => this.props.onClick(i)}
       />
     );
   }
 
   render() {
-    const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     return (
       <div>
-        <div className='status'>{status}</div>
         <div className='board-row'>
           {this.renderSquare(0)}
           {this.renderSquare(1)}
