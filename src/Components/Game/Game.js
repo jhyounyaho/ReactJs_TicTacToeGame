@@ -14,6 +14,7 @@ class Game extends Component {
       }],
       xIsNext: true,
       stepNumber: 0,
+      isAsc: true,
     }
   }
 
@@ -46,6 +47,12 @@ class Game extends Component {
     })
   }
 
+  handleReverseToggle() {
+    this.setState({
+      isAsc: !this.state.isAsc
+    })
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -54,7 +61,7 @@ class Game extends Component {
     const moves = history.map((val, step) => {
       const desc = step ? `Go to move # ${step} | (${val.position.row}, ${val.position.col})` : `Go to game start`;
       return(
-        <li key={step}>
+        <li value={step + 1} key={step}>
           <button 
             onClick={() => this.jumpTo(step)}
             className={step === this.state.stepNumber ? 'font-weight-bold' : ''}
@@ -64,6 +71,18 @@ class Game extends Component {
         </li>
       )
     })
+
+    if(!this.state.isAsc) {
+      moves.reverse();
+    }
+
+    const reverseButtonDesc = this.state.isAsc ? '뒤집기' : '원래대로';
+    const reverseButton = (
+      <button onClick={() => this.handleReverseToggle()}>
+        {reverseButtonDesc}
+      </button>
+    )
+
     let status = '';
     if (winner) {
       status = `Winner: ${winner}`;
@@ -82,6 +101,7 @@ class Game extends Component {
         <div className='game-info'>
           <div>{status}</div>
           <ol>{moves}</ol>
+          <div>{reverseButton}</div>
         </div>
       </div>
     )
